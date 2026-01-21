@@ -2,11 +2,12 @@ from models.book import Book
 import sqlite3
 from pathlib import Path
 
-file_path_data_base = Path("data/dataBooks.db")
+ROOT_DIR = Path(__file__).parent.parent
+DB_PATH = ROOT_DIR / "data" / "dataBooks.db"
 
 class System:
     def __init__(self):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
             cur.execute("CREATE TABLE IF NOT EXISTS books("
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -16,11 +17,11 @@ class System:
                         "state_Read INTEGER)")
 
     def register_book(self, title: str, writer: str, year: int):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             self.__save_book_in_data_base(Book(title=title, writer=writer, year=year, state_Read=0))
 
     def delete_book(self, bookTitle):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             book_exist = self.__check_if_title_exist(bookTitle)
@@ -44,7 +45,7 @@ class System:
                         print("This id dont exist")
 
     def search_book_by_title(self, bookTitle):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             title_exist = self.__check_if_title_exist(bookTitle)
@@ -60,7 +61,7 @@ class System:
                 print("This title dont exist")
 
     def update_state(self, bookTitle):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             title_exist = self.__check_if_title_exist(bookTitle)
@@ -80,28 +81,28 @@ class System:
                 print(f"This title dont exist")
 
     def print_all_read_book(self):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             for row in cur.execute("SELECT * FROM books WHERE state_Read = 1"):
                 print(f"Book: {row[1]} | Release Year: {row[3]}")
 
     def print_all_unread_book(self):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             for row in cur.execute("SELECT * FROM books WHERE state_Read = 0"):
                 print(f"Book: {row[1]} | Release Year: {row[3]}")
 
     def print_all_books(self):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             for row in cur.execute("SELECT * FROM books"):
                 print(f"Book: {row[1]} | Release Year: {row[3]}")
 
     def delete_all_books(self):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             user_choice = input(
@@ -115,7 +116,7 @@ class System:
                     con.commit()
 
     def __save_book_in_data_base(self, book):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             sql_query = "INSERT INTO books (title, writer, year, state_Read) VALUES (?, ?, ?, ?)"
@@ -123,7 +124,7 @@ class System:
             con.commit()
 
     def __check_if_id_exist(self, id):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             sql_query = "SELECT EXISTS(SELECT 1 FROM books WHERE id = ?)"
@@ -133,7 +134,7 @@ class System:
         return result[0] == 1
 
     def __check_if_title_exist(self, bookTitle):
-        with sqlite3.connect(file_path_data_base) as con:
+        with sqlite3.connect(DB_PATH) as con:
             cur = con.cursor()
 
             sql_query = "SELECT EXISTS(SELECT 1 FROM books WHERE title LIKE '%' || ? || '%')"
