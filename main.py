@@ -1,11 +1,13 @@
 from services.system import System
+import os
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 new_system = System()
-
-continue_using_system = True
-
 print("WELCOME TO THE LIBRARY SYSTEM")
 
+continue_using_system = True
 while continue_using_system:
 
     try:
@@ -32,12 +34,12 @@ while continue_using_system:
                     new_system.register_book(book_title, book_writer, book_year)
 
             case 2:
-                print("\n" * 10)
+                clear_screen()
                 book_title = input("Type the book title to update the state: ").title()
                 new_system.update_state(book_title)
 
             case 3:
-                print("\n" * 10)
+                clear_screen()
                 user_search_mode = int(input("Choice what you want to search by the number: "                            
                                 "\n1 - Search Book By Title |"
                                 "2 - Print All Books        |"
@@ -55,7 +57,7 @@ while continue_using_system:
                     case 4:
                         new_system.print_all_unread_book()
                 break_read = input("Press enter to continue ")
-                print("\n" * 10)
+                clear_screen()
 
             case 4:
                 user_delete_mode = int(input("Choice what you want to delete by the number: "                            
@@ -68,4 +70,4 @@ while continue_using_system:
                         new_system.delete_book(book_title)
                     case 2:
                         new_system.delete_all_books()
-                print("\n" * 10)
+                clear_screen()
