@@ -38,8 +38,6 @@ class System:
                     con.commit()
                 else:
                     print("This id dont exist")
-        else:
-            print("This title dont exist")
 
     def search_book_by_title(self, bookTitle):
         title_exist = self.__check_if_title_exist(bookTitle)
@@ -50,7 +48,7 @@ class System:
             results = cur.fetchall()
 
             for row in results:
-                print(f"Book: {row[1]} | Release Year: {row[3]}")
+                print(f"Id: {row[0]} | Book: {row[1]} | Writer: {row[2]} |Release Year: {row[3]}")
         else:
             print("This title dont exist")
 

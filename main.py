@@ -62,7 +62,6 @@ while continue_using_system:
                     new_system.delete_book(book_title)
                 case 2:
                     new_system.delete_all_books()
-            break_read = input("Press enter to continue ")
             print("\n" * 10)
 
 
